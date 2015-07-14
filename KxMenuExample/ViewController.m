@@ -21,6 +21,7 @@
     UIButton *_btn5;
     UIButton *_btn6;
     UIButton *_btn7;
+    UIView *_containerView;
 }
 
 - (id)init
@@ -84,8 +85,20 @@
     [_btn7 addTarget:self action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_btn7];
 
-    //[KxMenu setTintColor: [UIColor colorWithRed:15/255.0f green:97/255.0f blue:33/255.0f alpha:1.0]];
-    //[KxMenu setTitleFont:[UIFont systemFontOfSize:14]];
+    
+    _containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, W, 44)];
+    _containerView.backgroundColor = [UIColor colorWithRed: 1 green: 0.5054 blue: 0.9739 alpha: 1.0];
+    [self.view addSubview:_containerView];
+    
+    UIButton *myBtn = [[UIButton alloc] initWithFrame:CGRectMake(W - 100, 20, 100, 16)];
+    [myBtn setTitle:@"view in view" forState:UIControlStateNormal];
+    
+    myBtn.backgroundColor = [UIColor purpleColor];
+    [myBtn addTarget:self action:@selector(showViewInView:) forControlEvents:UIControlEventTouchUpInside];
+    [_containerView addSubview:myBtn];
+    
+//    [KxMenu setTintColor: [UIColor colorWithRed:15/255.0f green:97/255.0f blue:33/255.0f alpha:1.0]];
+//    [KxMenu setTitleFont:[UIFont systemFontOfSize:14]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -149,9 +162,37 @@
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentCenter;
     
+    
     [KxMenu showMenuInView:self.view
                   fromRect:sender.frame
                  menuItems:menuItems];
+}
+
+- (void)showViewInView:(UIButton *)sender
+{
+    NSArray *items = @[[KxMenuItem menuItem:@"总榜"
+                                      image:nil
+                                     target:self
+                                     action:@selector(pushMenuItem:)],
+                       [KxMenuItem menuItem:@"周榜"
+                                      image:nil
+                                     target:self
+                                     action:@selector(pushMenuItem:)],
+                       [KxMenuItem menuItem:@"月榜"
+                                      image:nil
+                                     target:self
+                                     action:@selector(pushMenuItem:)],
+                       [KxMenuItem menuItem:@"季榜"
+                                      image:nil
+                                     target:self
+                                     action:@selector(pushMenuItem:)]
+                       
+                       ];
+    
+    [KxMenu showMenuInView:self.view
+                  fromRect:[self.view convertRect:sender.frame fromView:_containerView]
+                 menuItems:items];
+
 }
 
 - (void) pushMenuItem:(id)sender
